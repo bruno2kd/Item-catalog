@@ -1,0 +1,45 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<main class="main">
+	<div class="container">     
+        <div class="row tudo">  
+          <div class="col-md-4 itens" >
+            
+            <img src="{{url_for('static', filename=i.picture)}}">
+            <p>{{i.name}}</p>
+            <p>R$ {{i.price}}</p>
+          </div>
+          <div class="espec">
+          	<form action="{{url_for('itemBought', marca_id=marca_id, item_id=i.id)}}" method="post" enctype=multipart/form-data>
+            <table>
+            <tr>
+                <th>
+                    <input type="hidden" name="on0" value="Size">
+                    <label for="os0">Size</label>
+                </th>
+                <td>
+                    <select name="os0" id="os0">
+                        {% if i.quantityP > 0 %}
+                        	<option value="P">P</option>
+                        {% endif %}
+                        {% if i.quantityM > 0 %}
+                            <option value="M">M</option>
+                        {% endif %}
+                        {% if i.quantityG > 0 %}
+                            <option value="G">G</option>
+                        {% endif %}
+                    </select>
+                </td>
+            </tr>
+            </table>
+            <input type="submit" value="Add to Cart" name="submit">
+        </form>
+        <p><a href="{{url_for('marcaVitrine',marca_id=marca_id)}}">back</a></p>
+          </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

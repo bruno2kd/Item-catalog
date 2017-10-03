@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Stylera</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<link rel=stylesheet type=text/css href="../static/style.css">
+		<link href="https://fonts.googleapis.com/css?family=Raleway:200,400,700" rel="stylesheet">
+		<!--<link rel="stylesheet" media="screen and (max-width:610px)" href="css/under_610.css">-->
+	</head>
+	<body>
+		<nav class="navbar navbar-light bg-faded">
+			<div class="container">
+				<span class="navbar-text col-md-1">
+					<a href="{{url_for('marcasGuide')}}">
+						<p>Estile</p>
+					</a>
+				</span>
+				<span class="navbar-text col-md-1 login">
+				<a href="#">Log in</a>
+				</span>
+			</div>
+		</nav>
+
+
+		<main class="main">
+			<div class="container">     
+		        <div class="row tudo">  
+		          <div class="col-md-4 itens" >
+		            
+		            <img src="../static/Enika4camiseta11.jpg">
+		            <p>Camiseta</p>
+		            <p>R$ 15</p>
+		          </div>
+		          <div class="espec">
+		          	<form target="paypal" action="#" method="post">
+                    <!--<input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="{{ product["paypal"] }}">
+                    <input type="hidden" name="item_name" value="{{ product["name"] }}">-->
+                    <table>
+                    <tr>
+                        <th>
+                            <input type="hidden" name="on0" value="Size">
+                            <label for="os0">Size</label>
+                        </th>
+                        <td>
+                            <select name="os0" id="os0">
+                                <!--{%  for size in product["sizes"] %}
+                                    <option value="{{ size }}">{{ size }} </option>
+                                {% endfor %}-->
+                                	<option value="P">P</option>
+                                	<option value="M">M</option>
+                                	<option value="G">G</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </table>
+                    <input type="submit" value="Add to Cart" name="submit">
+                </form>
+		          </div>
+		        </div>
+			</div>
+		</main>
+			
+	</body>
+</html>
+
+
+
+ 
+
+	

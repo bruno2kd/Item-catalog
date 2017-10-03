@@ -1,0 +1,55 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+	<div class="main">
+	<div class="container">
+      <div class="row header">
+        <h1>{{ marca.name }}
+        </h1>
+        <div id="images">
+          <img height=300 width=300 src="{{url_for('static', filename=marca.picture)}}">
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="flash">
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+
+          <ul>
+            {% for message in messages %}
+            <li><strong>{{ message }}</strong></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        {% endwith %}
+        </div>
+      </div>
+
+      <!--TODAS AS PECAS JUNTAS DEPOIS SERA FEITA A DIFERENCA-->
+      <div class="row tudo">
+      {% for i in items %}
+          {% if i.quantityP > 0 or i.quantityM > 0 or i.quantityG > 0 %}     
+          <div class="col-md-4 itens" >
+            <a href=" {{ url_for('buyItem',marca_id=i.marca_id,item_id=i.id) }}">
+              <img src="{{url_for('static', filename=i.picture)}}">
+              <p>{{i.name}}</p>
+              <p>R$ {{i.price}}</p>
+              </br>
+            </a>
+          </div>
+          {% endif %}
+      {% endfor %}
+      </div>
+
+      {% if marcaItem == None %}
+        <h4>{{'There is no item in this marca'}}</h4>
+      {% endif %}
+      <br>
+      <br>
+      <p><a href="{{url_for('marcasGuide')}}">Back to Marca's Guide</a></p>
+    </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+		<div class="flash">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+
+        <ul>
+          {% for message in messages %}
+          <li><strong>{{ message }}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        </div>
+
+        <div class="container">
+        	<form class="form-inline" method="GET" action="/search">
+        		<div class="form-group">
+        			<label for="query">Name</label>
+        			<input type="text" class="form-control" name="query" id="query">
+        		</div>
+        		<button type="submit" class="btn btn-primary">Search</button>
+        	</form>
+        </div>
+
+		<main class="main">
+			<div class="container">
+				{% for marca in marcas %}
+				<a href="{{url_for('marcaVitrine',marca_id=marca.id)}}">
+					<div class="lojas row">
+						<div class="col-md-4" id="nomes">
+							<h1>{{marca.name}}</h1>
+							<p>{{marca.description}}</p>
+						</div>
+						<a href="{{url_for('marcaVitrine',marca_id=marca.id)}}">
+						<div class="col-md-4 col-md-offset-3" id="images">
+							<img height=300 width=300 src="{{url_for('static', filename=marca.picture)}}">
+						</div>
+						</a>
+						<hr>
+					</div>
+				</a>
+				<hr>
+				{% endfor %}
+				<div class="create">
+					{% if 'username' not in session %}
+					</br>
+					{% else %}
+					<a href="{{url_for('newMarca')}}">
+					Create a Marca</a>
+					</br>
+					{% endif %}
+				</div>
+				<div class="none">
+					{% if marca_test == None %}
+					<p>There is no Store yet</p>
+					{% endif %}
+				</div>
+			</div>
+		</main>
+{% endblock %}
+
+ 
+
+	

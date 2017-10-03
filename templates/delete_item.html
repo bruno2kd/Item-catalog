@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+
+	<div class="main">
+	<div class="container">
+
+		<h1>Delete {{i.name}}?</h1>
+		<form action="{{url_for('deleteItem',marca_id=marca_id, item_id=i.id)}}" method="POST"">
+		</br>
+			<input type="submit" value="Delete">
+		</form>
+		</br>
+		
+		<p><a href="{{url_for('myStore', marca_id=marca_id)}}">Cancel</a></p>
+
+	</div>
+	</div>
+
+{% endblock %}

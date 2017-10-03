@@ -1,0 +1,67 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+  <div class="container">
+    <h1>My Store</h1>
+  </div>
+  {% if 1==1 %}
+	<div class="main">
+	<div class="container">
+      
+      <div class="row">
+        <div class="flash">
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+
+          <ul>
+            {% for message in messages %}
+            <li><strong>{{ message }}</strong></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        {% endwith %}
+        </div>
+      </div>
+
+      <div class="row header">
+        <p><a href="{{url_for('newMarca')}}">Add Store</a></p>
+        <hr>
+      </div>
+
+      <!--TODAS AS PECAS JUNTAS DEPOIS SERA FEITA A DIFERENCA-->
+      {% for marca in marcas %}
+        <a href="{{url_for('myStore',marca_id=marca.id)}}">
+          <div class="lojas row">
+            <div class="col-md-4" id="nomes">
+              <h1>{{marca.name}}</h1>
+              <p>{{marca.description}}</p>
+              {% if visita==marca.user_id%}
+              <p><a href="{{url_for('editMarca', marca_id=marca.id)}}">Edit</a></p>
+              <p><a href="{{url_for('deleteMarca', marca_id=marca.id)}}">Delete</a></p>
+              </br>
+              {% endif %}
+            </div>
+            <div class="col-md-4 col-md-offset-3" id="images">
+              <img height=300 width=300 src="{{url_for('static', filename=marca.picture)}}">
+            </div>
+            <hr>
+          </div>
+        </a>
+        <hr>
+        {% endfor %}
+      {% else %}
+        <p>You are not allowed here</p>
+        </br>
+      {% endif %}
+
+      {% if marcaItem == None %}
+        <h4>{{'There is no item in this marca'}}</h4>
+      {% endif %}
+      <br>
+      <br>
+      <p><a href="{{url_for('marcasGuide')}}">Back to Marca's Guide</a></p>
+    </div>
+    </div>
+
+{% endblock %}

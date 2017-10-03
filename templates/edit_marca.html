@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+	<div class="main">
+	<div class="container">
+		
+		<h1>Edit Marca</h1>
+
+		<form enctype=multipart/form-data action="{{url_for('editMarca', marca_id=marca_id)}}" method="POST">
+			<p>Name:</p>
+				<input type="text" name="name" size="30" value="{{marca.name}}">
+				</br>
+			<p>Description:</p>
+				<input type="text" name="description" size="30" value="{{marca.description}}">
+				<p>Image:</p>
+				<input type="file" name="file">
+				</br>
+				</br>
+				<input type="submit" value="Edit">		
+		</form>
+		</br>
+		<p><a href="{{url_for('myStoreList')}}">Cancel</a></p>
+
+	</div>
+	</div>
+
+{% endblock %}

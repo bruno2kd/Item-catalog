@@ -1,0 +1,21 @@
+<nav class="navbar navbar-light bg-faded">
+	<div class="container">
+		<span class="navbar-text col-md-1">
+			<a href="{{url_for('marcasGuide')}}">
+				<p>Estile</p>
+			</a>
+		</span>
+		{% if check == True %}
+		<span class="navbar-text col-md-2 store">
+		<a href="{{url_for('myStoreList')}}">My Store</a>
+		</span>
+		{% endif %}
+		<span class="navbar-text col-md-1 login">
+		{% if 'username' not in session %}
+		<a href="{{url_for('showLogin')}}">Log in</a>
+		{% else %}
+		<a href="{{url_for('disconnect')}}">Logout</a>
+		{% endif %}
+		</span>
+	</div>
+</nav>

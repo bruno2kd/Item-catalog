@@ -1,0 +1,75 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+  <div class="container">
+    <h1>My Store {{marca.name}} </h1>
+  </div>
+  {% if 1==1 %}
+	<div class="main">
+	<div class="container">
+      <div class="row header">
+        <div id="images">
+          <img height=300 width=300 src="{{url_for('static', filename=marca.picture)}}">
+        </div>
+      </div>
+      
+      <div class="row">
+      <div class="flash">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+
+        <ul>
+          {% for message in messages %}
+          <li><strong>{{ message }}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      {% endwith %}
+      </div>
+      </div>
+
+      <div class="row header">
+        <p><a href="{{url_for('newItens',marca_id=marca.id)}}">Add Item</a></p> 
+      </div>
+
+      <!--TODAS AS PECAS JUNTAS DEPOIS SERA FEITA A DIFERENCA-->
+      <div class="row tudo">
+      {% for i in itens %}        
+          <div class="col-md-4 itens" >
+              <img src="{{url_for('static', filename=i.picture)}}">
+              <p>{{i.name}}</p>
+              <p>R$ {{i.price}}</p>
+              <p>{{i.description}}</p>
+              <p>Número de ref:{{i.id}}</p>
+              <p>Itens size P on Inventory:{{i.quantityP}}</p>
+              <p>Itens size M on Inventory:{{i.quantityM}}</p>
+              <p>Itens size G on Inventory:{{i.quantityG}}</p>
+              </br>
+            {% if 'username' not in login_session %}  
+            {% else %}
+            <div class="editdeletepane">
+              <p><a href="{{ url_for('editItem',marca_id=i.marca_id,item_id=i.id) }}">Edit</a></p> 
+              <p><a href="{{ url_for('deleteItem',marca_id=i.marca_id,item_id=i.id) }}">Delete</a></p>
+              <p><a href="{{ url_for('mngInventory',marca_id=i.marca_id,item_id=i.id) }}">Manage Inventory</a></p>
+              </br>
+            </div>   
+          {% endif %}
+          </div>
+      {% endfor %}
+      </div>
+      {% else %}
+        <p>You are not allowed here</p>
+        </br>
+      {% endif %}
+
+      {% if marcaItem == None %}
+        <h4>{{'There is no item in this marca'}}</h4>
+      {% endif %}
+      <br>
+      <br>
+      <p><a href="{{url_for('myStoreList')}}">Back</a></p>
+    </div>
+    </div>
+
+{% endblock %}
