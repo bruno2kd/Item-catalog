@@ -42,9 +42,11 @@
               </br>
               {% endif %}
             </div>
+            <a href="{{url_for('myStore',marca_id=marca.id)}}">
             <div class="col-md-4 col-md-offset-3" id="images">
               <img height=300 width=300 src="{{url_for('static', filename=marca.picture)}}">
             </div>
+            </a>
             <hr>
           </div>
         </a>

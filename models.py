@@ -6,29 +6,32 @@ from sqlalchemy import create_engine
 
 # for the users stuff
 from passlib.apps import custom_app_context as pwd_context
-import random, string
-from itsdangerous import(TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
+import random
+import string
+from itsdangerous import(TimedJSONWebSignatureSerializer as Serializer,
+                         BadSignature, SignatureExpired)
 
-#encoding stuff
+# encoding stuff
 
 import codecs
 sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
-secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+secret_key = ''.join(random.choice(
+    string.ascii_uppercase + string.digits) for x in xrange(32))
 Base = declarative_base()
+
 
 class User(Base):
     """Class for Users"""
-    __tablename__='user'
+    __tablename__ = 'user'
 
-    name = Column(
-        String(80), nullable = False)
-    email = Column(String, nullable = False)
+    name = Column(String(80), nullable=False)
+    email = Column(String, nullable=False)
     picture = Column(String)
     username = Column(String(32))
-    id = Column(
-        Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
+    password = Column(String(12))
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -37,8 +40,8 @@ class User(Base):
         return pwd_context.verify(password, self.password_hash)
 
     def generate_auth_token(self, expiration=600):
-        s = Serializer(secret_key, expires_in = expiration)
-        return s.dumps({'id': self.id })
+        s = Serializer(secret_key, expires_in=expiration)
+        return s.dumps({'id': self.id})
 
     @staticmethod
     def verify_auth_token(token):
@@ -46,10 +49,10 @@ class User(Base):
         try:
             data = s.loads(token)
         except SignatureExpired:
-            #Valid Token, but expired
+            # Valid Token, but expired
             return None
         except BadSignature:
-            #Invalid Token
+            # Invalid Token
             return None
         user_id = data['id']
         return user_id
@@ -60,9 +63,9 @@ class Marca(Base):
     __tablename__ = 'marca'
 
     name = Column(
-        String(80), nullable = False, unique=True)
+        String(80), nullable=False, unique=True)
     id = Column(
-        Integer, primary_key = True)
+        Integer, primary_key=True)
     description = Column(
         String(250))
     picture = Column(String)
@@ -85,9 +88,9 @@ class ItemMarca(Base):
     __tablename__ = 'item_marca'
 
     name = Column(
-        String(80), nullable = False)
+        String(80), nullable=False)
     id = Column(
-        Integer, primary_key = True)
+        Integer, primary_key=True)
     peca = Column(
         String(250))
     description = Column(
@@ -105,7 +108,7 @@ class ItemMarca(Base):
         Integer, ForeignKey('user.id'))
     marca = relationship(Marca)
     user = relationship(User)
-    
+
     @property
     def serialize(self):
         # Returns object data in easily serializeable format
@@ -125,7 +128,6 @@ Insert at the end of the file!
 """
 
 engine = create_engine(
-    'postgresql:///catalogoestilo')
+    'postgresql:///estile')
 
 Base.metadata.create_all(engine)
-

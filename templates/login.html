@@ -29,122 +29,198 @@
 	  			</span>
   			</div>
 		</nav>
+		<div class="flash">
+	        {% with messages = get_flashed_messages() %}
+	          {% if messages %}
+
+	        <ul>
+	          {% for message in messages %}
+	          <li><strong>{{ message }}</strong></li>
+	          {% endfor %}
+	        </ul>
+	        {% endif %}
+	        {% endwith %}
+        </div>
+
 		<div class="main">
-			<div class="container">
+		<div class="container">
+		<div class="row">
+		<div class="col-md-6">
 				<div id="connecting"></div>
 			</br>
-			<!-- GOOGLE SIGN IN -->
+			<div id="loginform">
+			<h4>Log in</h4>
 
-	<div id="signinButton">
-		<span class="g-signin"
-			data-scope="openid email"
-            data-clientid="943125590768-5ar6u7co8ca83kdim2mpl0blf2ckqgq9.apps.googleusercontent.com"
-            data-redirecturi="postmessage"
-            data-accesstype="offline"
-            data-cookiepolicy="single_host_origin"
-            data-callback="signInCallback"
-            data-approvalprompt="force">	
-		</span>
-	</div>
-	<div id="result"></div>
-	<script>
-		function signInCallback(authResult) {
-			if (authResult['code']) {
-				// esconde o botao de sign in
-				$('#signinButton').attr('style', 'display: none');
-				$('#connecting').html("<h2>Connecting</h2>");
-				// manda para server 'one-time-use' code, se o server responde, escreve 'login successful' na pagina e redireciona para o restaurante.
-				$.ajax({
-					type: 'POST',
-					url: '/gconnect?state={{STATE}}',
-					processData: false,
-					data: authResult['code'],
-					contentType: 'application/octet-stream; charset=utf-8',
-					success: function(result) {
-						if(result) {
-							$('#result').html('Login Successful!</br>'+result+'</br>Redirecting...')
-						setTimeout(function() {
-							window.location.href = "/marcas";
-						}, 4000);
-						}
-						else if (authResult['error']) {
-							console.log('There was an error: ' + authResult['error']);
-						}
-						else {
-							$('#result').html('Failed to make a server side call.\
-								check your configaration an console.')
-						}
-					}
-				})
-			}
-		}
-
-	</script>
-
-<!-- END GOOGLE SIGN IN -->
-
-<!-- FACEBOOK SIGN IN STARTS HERE -->
-
-	<script>
-	  window.fbAsyncInit = function() {
-	    FB.init({
-	      appId      : '330679510691301',
-	      cookie     : true, //enables cookies to allow the server to access the session
-	      xfbml      : true, // parse social plugins on this page
-	      version    : 'v2.8' // the version 2.2
-	    });
-	    FB.AppEvents.logPageView();   
-	  };
-
-	  // Load the SDK asynchronously
-	  (function(d, s, id){
-	     var js, fjs = d.getElementsByTagName(s)[0];
-	     if (d.getElementById(id)) {return;}
-	     js = d.createElement(s); js.id = id;
-	     js.src = "//connect.facebook.net/en_US/sdk.js";
-	     fjs.parentNode.insertBefore(js, fjs);
-	   }(document, 'script', 'facebook-jssdk'));
-
-	  // Here we run a very simple test of the Graph API after login is
-	  // successful.  See statusChangeCallback() for when this call is made.
-	  function sendTokenToServer() {
-	    var access_token = FB.getAuthResponse()['accessToken'];
-	    console.log(access_token)
-	    console.log('Welcome!  Fetching your information.... ');
-	    FB.api('/me', function(response) {
-	      console.log('Successful login for: ' + response.name);
-	     $.ajax({
-	      type: 'POST',
-	      url: '/fbconnect?state={{STATE}}',
-	      processData: false,
-	      data: access_token,
-	      contentType: 'application/octet-stream; charset=utf-8',
-	      success: function(result) {
-	        // Handle or verify the server response if necessary.
-	        if (result) {
-	          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-	         setTimeout(function() {
-	          window.location.href = "/marcas";
-	          }, 4000);
-	        } 
-	        else {
-	        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
-	        }
-	      }
-	      
-	  });
-	    });
-	  }
-	</script>
-	<button>
-		<fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
-			<a href='javascript:sendTokenToServer()'>Login with Facebook</a>
-		</fb:login-button>	
-	</button>
-			</br>
+			<form action="{{url_for('appLogin')}}" method='POST' enctype=multipart/form-data>
+				<label>Email:</label>
+					<br>
+					<input type="text" name="email" size='30'>
+					</br>
+					</br>
+				<label>Password:</label>
+					<br>
+					<input type="password" name="password" size='30'>
+					</br>
+					</br>
+					<input type="submit" value="Log In">
+			</form>
 			</br>
 			</div>
-		</div>
+			<!-- GOOGLE SIGN IN -->
+			<div id="GoogleFbsignin">
+				<h4>Sign in with Facebook or Google</h4>
+			</div>
+
+			<div id="signinButton">
+				<span class="g-signin"
+					data-scope="openid email"
+		            data-clientid="943125590768-5ar6u7co8ca83kdim2mpl0blf2ckqgq9.apps.googleusercontent.com"
+		            data-redirecturi="postmessage"
+		            data-accesstype="offline"
+		            data-cookiepolicy="single_host_origin"
+		            data-callback="signInCallback"
+		            data-approvalprompt="force">	
+				</span>
+			</div>
+			<div id="result"></div>
+			<script>
+				function signInCallback(authResult) {
+					if (authResult['code']) {
+						// esconde o botao de sign in
+						$('#signinButton').attr('style', 'display: none');
+						$('#connecting').html("<h2>Connecting</h2>");
+						$('#loginform').html("<br>");
+						$('#signupform').html("<br>");
+						$('#GoogleFbsignin').html("");
+						$('#btnface').html("<br>");
+						// manda para server 'one-time-use' code, se o server responde, escreve 'login successful' na pagina e redireciona para o restaurante.
+						$.ajax({
+							type: 'POST',
+							url: '/gconnect?state={{STATE}}',
+							processData: false,
+							data: authResult['code'],
+							contentType: 'application/octet-stream; charset=utf-8',
+							success: function(result) {
+								if(result) {
+									$('#result').html('Login Successful!</br>'+result+'</br>Redirecting...')
+								setTimeout(function() {
+									window.location.href = "/marcas";
+								}, 4000);
+								}
+								else if (authResult['error']) {
+									console.log('There was an error: ' + authResult['error']);
+								}
+								else {
+									$('#result').html('Failed to make a server side call.\
+										check your configaration an console.')
+								}
+							}
+						})
+					}
+				}
+
+			</script>
+
+		<!-- END GOOGLE SIGN IN -->
+
+		<!-- FACEBOOK SIGN IN STARTS HERE -->
+
+			<script>
+			  window.fbAsyncInit = function() {
+			    FB.init({
+			      appId      : '330679510691301',
+			      cookie     : true, //enables cookies to allow the server to access the session
+			      xfbml      : true, // parse social plugins on this page
+			      version    : 'v2.8' // the version 2.2
+			    });
+			    FB.AppEvents.logPageView();   
+			  };
+
+			  // Load the SDK asynchronously
+			  (function(d, s, id){
+			     var js, fjs = d.getElementsByTagName(s)[0];
+			     if (d.getElementById(id)) {return;}
+			     js = d.createElement(s); js.id = id;
+			     js.src = "//connect.facebook.net/en_US/sdk.js";
+			     fjs.parentNode.insertBefore(js, fjs);
+			   }(document, 'script', 'facebook-jssdk'));
+
+			  // Here we run a very simple test of the Graph API after login is
+			  // successful.  See statusChangeCallback() for when this call is made.
+			  function sendTokenToServer() {
+			    var access_token = FB.getAuthResponse()['accessToken'];
+			    console.log(access_token)
+			    console.log('Welcome!  Fetching your information.... ');
+			    $('#signinButton').attr('style', 'display: none');
+				$('#connecting').html("<h2>Connecting</h2>");
+				$('#loginform').html("<br>");
+				$('#signupform').html("<br>");
+				$('#GoogleFbsignin').html("");
+				$('#btnface').html("<br>");
+			    FB.api('/me', function(response) {
+			      console.log('Successful login for: ' + response.name);
+			     $.ajax({
+			      type: 'POST',
+			      url: '/fbconnect?state={{STATE}}',
+			      processData: false,
+			      data: access_token,
+			      contentType: 'application/octet-stream; charset=utf-8',
+			      success: function(result) {
+			        // Handle or verify the server response if necessary.
+			        if (result) {
+			          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+			         setTimeout(function() {
+			          window.location.href = "/marcas";
+			          }, 4000);
+			        } 
+			        else {
+			        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+			        }
+			      }
+			      
+			  });
+			    });
+			  }
+			</script>
+			<button id='btnface'>
+				<fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+					<a href='javascript:sendTokenToServer()'>Login with Facebook</a>
+				</fb:login-button>	
+			</button>
+				</br>
+				</br>
+			</div>
+				<div class="col-md-6" id='signupform'>
+					<h1>Sign Up</h1>
+
+					<form action="{{url_for('signUp')}}" method='POST' enctype=multipart/form-data>
+						<label>Full name:</label>
+							</br>
+							<input type="text" name="name" size='30'>
+							</br>
+							</br>
+						<label>Email:</label>
+							</br>
+							<input type="text" name="email" size='30'>
+							</br>
+							</br>
+						<label>Password:</label>
+							</br>
+							<input type="password" name="password" size='30'>
+							</br>
+							</br>
+						<label>Repeat your password:</label>
+							</br>
+							<input type="password" name="password2" size='30'>
+							</br>
+							</br>
+						<input type="submit" value="Confirm">
+					</form>
+					</br>
+				</div>
+			</div>
+			</div>
+			</div>
 	</body>
 </html>
 

@@ -1,0 +1,25 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+	<div class="main">
+	<div class="container">
+	<h1>Log in</h1>
+
+	<form action="{{url_for('entrando')}}" method='POST' enctype=multipart/form-data>
+		<label>Email:</label>
+			<input type="text" name="email" size='30'>
+			</br>
+			</br>
+		<label>Password:</label>
+			<input type="password" name="password" size='30'>
+			</br>
+			</br>
+			<input type="submit" value="Confirm">
+	</form>
+	</br>
+	<p><a href="">back</a></p>
+	</div>
+	</div>
+
+{% endblock %}
